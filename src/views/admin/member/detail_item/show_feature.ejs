@@ -1,0 +1,65 @@
+<div class="tab-pane fade show active" id="show-feature" role="tabpanel" aria-labelledby="home-tab">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4 mt-2">
+      <div class="card-body">
+        <div class="row">
+            <div class="col-md-5">
+                <form action="/admin/item/add/feature" method = 'POST' enctype="multipart/form-data">  <!-- cara untuk mengirimkan data dari form ke routes, action: routesnya, method: method yang dipakai routes tersebut || enctype="multipart/form-data = untuk mengupload file melalui ejs-->
+                        <div class="form-group">
+                          <label for="name">Name </label> <!-- for: sepertinya nda wajib -->
+                          <input type="text" class="form-control" name="name" placeholder="Enter name" required> <!-- id: id input, name: initialization data yang akan dikirim ke routes -->
+                        </div>
+                        <div class="form-group">
+                          <label for="name">QTY</label> <!-- for: sepertinya nda wajib -->
+                          <input type="number" class="form-control" name="qty" placeholder="Enter qty" required> <!-- id: id input, name: data yang akan dikirim ke routes -->
+                        </div>
+                        <div class="form-group">
+                          <label for="name">Image</label> <!-- for: sepertinya nda wajib -->
+                          <input type="file" class="form-control" name="image" required> <!-- id: id input, name: data yang akan dikirim ke routes -->
+                        </div>
+                        <input type="hidden" value = "<%=itemId %>" name="itemId">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+            <div class="col-md-7">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>QTY</th>
+                        <th>Image URL</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for(let i = 0; i< feature.length; i++){ %>
+                        <!-- read data catagory -->
+                            <tr>
+                              <td><%= i + 1 %></td>
+                              <td><%= feature[i].name %></td>
+                              <td><%= feature[i].qty %></td>
+                              <td>
+                                <img src="https://mern-admin-staycation.herokuapp.com/<%=feature[i].imageUrl %>" alt="imageUrl" width="70px">
+                              </td>
+                              <td>
+                                <form action="/admin/item/<%= itemId%>/feature/<%= feature[i].id%>?_method=DELETE" method="POST">
+                                  <!--  cara mengambil id dan name dari data -->
+                                  <a href="javascript:void()" type="button" class= 'btn btn-warning btn-circle btn-sm button-update'
+                                  data-id = "<%= feature[i].id %>" data-name = "<%= feature[i].name %>"  
+                                  data-qty = "<%= feature[i].qty %>"
+                                  ><i class = "fas fa-edit"></i></a>  <!-- javascript void(): untuk menghandle action button-->
+                                  <button type="submit" class = 'btn btn-danger btn-circle btn-sm'><i class = "fas fa-trash"></i></button>
+                                </form>
+                                </td>
+                            </tr>
+                     <% } %>
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>

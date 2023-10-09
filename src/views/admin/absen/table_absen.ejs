@@ -1,0 +1,80 @@
+                  <!-- DataTales Example -->
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                      <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-modal"> <!-- data-target: target dari tombol tersebut mau diarahkan kemana-->
+                     <!-- <i class = "fas fa-plus"></i> -->
+                      filter
+                    </button>
+                    </div>
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="display: block;  overflow-x: auto; white-space: nowrap;">
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th>Name</th>
+                              <th>Full Name</th>
+                              <%
+                              // Fungsi untuk mengonversi tanggal menjadi format "DD-MM-YYYY"
+                              function konversiTanggalKeFormatBaru(tanggalDalamFormatAwal) {
+                                let tanggal = tanggalDalamFormatAwal.getDate();
+                                let bulan = tanggalDalamFormatAwal.getMonth() + 1; // Ingatlah bahwa bulan dimulai dari 0 (Januari) hingga 11 (Desember)
+                                let tahun = tanggalDalamFormatAwal.getFullYear();
+                                return tanggal.toString().padStart(2, '0') + '-' + bulan.toString().padStart(2, '0') + '-' + tahun;
+                              }
+                              
+                              for (let i = 0; i < date.length; i++) {
+                                let tanggalDalamFormatAwal = new Date(date[i].date_created);
+                                let tanggalDalamFormatBaru = konversiTanggalKeFormatBaru(tanggalDalamFormatAwal);
+                                let timeWithoutMiliSeconds = date[i].absenTimeString.substring(0, 8);
+                              %>
+                                <th>
+                                  <span style="font-size: 10px;">created at: <%= tanggalDalamFormatBaru %></span>
+                                  <br/>
+                                  <%= date[i].absenDateString %>
+                                  <br/>
+                                  <%= timeWithoutMiliSeconds %>
+                                </th>
+                              <% } %>
+                          </tr>
+                          
+                          </thead>
+                          <tbody>
+                            <% if(member.length !== 0){ %>
+                              <% if(member[0].length != 0){ %>
+                                <% for(let i = 0; i< member.length; i++){ %>
+                                  <tr>
+                                    <td><%=i + 1 %></td>
+                                    <td><%=member[i][0].userName %></td>
+                                    <td><%=member[i][0].firstName%> <%=member[i][0].lastName %></td>
+                                    <% for(let j = 0; j< member[i].length; j++){ %>
+                                        <% if(member[i][j].presence.includes('ontime')){ %>
+                                          <td >
+                                            <span style="color: #2ecc71;">
+                                              <%= member[i][j].presence.split("_")[0] %>
+                                            </span>
+                                            </td>
+                                        <% }else if(member[i][j].presence.includes('late')){  %>
+                                          <td >
+                                            <span style="color: #ccba2e;">
+                                              <%= member[i][j].presence.split("_")[0] %>
+                                            </span>
+                                            </td>
+                                          <% } else{ %>
+                                            <td >
+                                              <span style="color: #cc0000;">
+                                                <%= member[i][j].presence %>
+                                              </span>
+                                              </td>
+                                            <% } %>
+                                         <% } %>
+                                       </tr>
+                                    <% } %>
+                                 <% } %>
+                             <% } %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>

@@ -1,0 +1,66 @@
+          <div class="tab-pane fade show active" id="show-all-member" role="tabpanel" aria-labelledby="home-tab">
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4 mt-2">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>No all</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Reset Password</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for(let i = 0; i< member.length; i++){ %>
+                        <!-- read data catagory -->
+                            <tr>
+                              <td><%= i + 1 %></td>
+                              <td><%= member[i].firstName %></td>
+                              <td><%= member[i].lastName %></td>
+                              <td><%= member[i].userName %></td>
+                              <td><%= member[i].email %></td>
+                              <td>
+                                <% if(member[i].isActive == false){ %>
+                                  <span style="color: #ccba2e;">
+                                    Inactive
+                                  </span>
+                                  <% } %>
+                                <% if(member[i].isActive == true){  %>
+                                  <span style="color: #cc0000;">
+                                    Active
+                                  </span>
+                                  <% } %>
+                              </td>
+                            <td>
+                              -
+                            </td>
+                              
+                              <td>
+                              <!-- form Delete -->
+                                <form action="/admin/member/<%= member[i]._id%>?_method=DELETE" method="POST">
+                                  <!--  cara mengambil id dan name dari data -->
+                                  <a href="/admin/item/<%= member[i].id%>" class='btn btn-info btn-sm'>edit</a>  <!-- javascript void(): untuk menghandle action button-->
+                                  <button type="submit" class='btn btn-danger btn-sm'>Hapus</button>
+                                  <!-- <a href="/admin/member/show-detail-item/<%= member[i].id%>" class= 'btn btn-success btn-circle btn-sm'><i class = "fas fa-plus"></i></a> -->
+                                </form>
+                                <br/>
+                                <!-- form Hapus -->
+                                <form action="/admin/member/status/<%= member[i].id%>?_method=PUT" method="POST">
+                                  <!--  cara mengambil id dan name dari data -->
+                                  <button type="submit" class='btn btn-primary btn-sm'>Update Status</button>
+                                </form>
+                                </td>
+                            </tr>
+                     <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>

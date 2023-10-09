@@ -1,0 +1,36 @@
+  <!-- Modal unutuk update feature -->
+  <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update Feature</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/admin/item/update/feature?_method=PUT" method = 'POST' enctype="multipart/form-data">  <!-- cara untuk mengirimkan data dari form ke routes, action: routesnya, method: method yang dipakai routes tersebut || enctype="multipart/form-data = untuk mengupload file melalui ejs-->
+            <div class="modal-body">
+                <div class="form-group">
+                  <label for="name">Name</label> <!-- for: sepertinya nda wajib -->
+                  <input type="text" class="form-control name" name="name" placeholder="Enter name" required> <!-- id: id input, name: data yang akan dikirim ke routes -->
+                </div>
+                <div class="form-group">
+                  <label for="name">QTY</label> <!-- for: sepertinya nda wajib -->
+                  <input type="number" class="form-control qty" name="qty" placeholder="Enter qty" required> <!-- id: id input, name: data yang akan dikirim ke routes -->
+                </div>
+                <div class="form-group">
+                  <label for="name">Image</label> <!-- for: sepertinya nda wajib -->
+                  <input type="file" class="form-control" name="image" > <!-- id: id input, name: data yang akan dikirim ke routes -->
+                  <span>Pilih gambar untuk update image</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" class="id" name="id">
+                <input type="hidden" value = "<%=itemId %>" name="itemId">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>

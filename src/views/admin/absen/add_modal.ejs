@@ -1,0 +1,34 @@
+<!-- Modal -->
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Filter</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="absen" method = 'GET'>  <!-- cara untuk mengirimkan data dari form ke routes, action: routesnya, method: method yang dipakai routes tersebut-->
+          <div class="modal-body">
+            <label for="tes">School Year</label> <!-- for: sepertinya nda wajib -->
+            <select class="form-control"  id="schoolYear" name="schoolYear" >
+              <% for(let i = 0; i< filterSchoolYear.length; i++){ %>
+                <option value=<%= filterSchoolYear[i] %> ><%= filterSchoolYear[i] %></option>
+              <% } %>
+            </select>
+
+            <label for="tes">Semester</label> <!-- for: sepertinya nda wajib -->
+            <select class="form-control"  id="semester" name="semester" >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="summer">summer</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">ok</button>
+          </div>
+      </form>
+    </div>
+  </div>
+  </div>

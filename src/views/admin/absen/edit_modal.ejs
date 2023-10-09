@@ -1,0 +1,26 @@
+  <!-- Modal -->
+  <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update Category</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/admin/category?_method=PUT" method = 'POST'>  <!-- cara untuk mengirimkan data dari form ke routes, action: routesnya, method: method yang dipakai routes tersebut-->
+            <div class="modal-body">
+                <div class="form-group">
+                  <label for="tes">Name</label> <!-- for: sepertinya nda wajib -->
+                  <input type="text" class="form-control name" name="name" placeholder="Enter name" required> <!-- id: id input, "name": data yang akan dikirim ke routes, class name : sebagai wadah untuk mengirim data yang telah di edit. name dan class sepertinya wajib ditulis-->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" class = "id" name="id">  <!-- "name" : untuk mendeklarasikan dan mengirimkan data. disini data yang dideklarasi dan dikirim adalah id-->
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Update </button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>

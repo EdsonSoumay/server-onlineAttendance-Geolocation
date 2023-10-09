@@ -1,0 +1,65 @@
+<div class="tab-pane fade" id="show-activity" >
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4 mt-2">
+      <div class="card-body">
+        <div class="row">
+            <div class="col-md-5">
+                <form action="/admin/item/add/activity" method = 'POST' enctype="multipart/form-data">  <!-- cara untuk mengirimkan data dari form ke routes, action: routesnya, method: method yang dipakai routes tersebut || enctype="multipart/form-data = untuk mengupload file melalui ejs-->
+                        <div class="form-group">
+                          <label for="name">Name </label> <!-- for: sepertinya nda wajib -->
+                          <input type="text" class="form-control" name="name" placeholder="Enter name" required> <!-- id: id input, name: initialization data yang akan dikirim ke routes -->
+                        </div>
+                        <div class="form-group">
+                          <label for="name">Type</label> <!-- for: sepertinya nda wajib -->
+                          <input type="text" class="form-control" name="type" placeholder="Enter type" required> <!-- id: id input, name: data yang akan dikirim ke routes -->
+                        </div>
+                        <div class="form-group">
+                          <label for="name">Image</label> <!-- for: sepertinya nda wajib -->
+                          <input type="file" class="form-control" name="image" required> <!-- id: id input, name: data yang akan dikirim ke routes -->
+                        </div>
+                        <input type="hidden" value="<%=itemId%>" name ="itemId">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+            <div class="col-md-7">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="dataTableActivity" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Image URL</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for(let i = 0; i< activity.length; i++){ %>
+                        <!-- read data catagory -->
+                            <tr>
+                              <td><%= i + 1 %></td>
+                              <td><%= activity[i].name %></td>
+                              <td><%= activity[i].type %></td>
+                              <td>
+                                <img src="https://mern-admin-staycation.herokuapp.com/<%=activity[i].imageUrl %>" alt="imageUrl" width="70px">
+                              </td>
+                              <td>
+                                <form action="/admin/item/<%= itemId%>/activity/<%= activity[i].id%>?_method=DELETE" method="POST">
+                                  <!--  cara mengambil id dan name dari data -->
+                                  <a href="javascript:void()" type="button" class= 'btn btn-warning btn-circle btn-sm button-update'
+                                  data-id = "<%= activity[i].id %>" data-name = "<%= activity[i].name %>"  
+                                  data-type = "<%= activity[i].type %>"
+                                  ><i class = "fas fa-edit"></i></a>  <!-- javascript void(): untuk menghandle action button data-type = untuk melempar data kedalam form-->
+                                  <button type="submit" class = 'btn btn-danger btn-circle btn-sm'><i class = "fas fa-trash"></i></button>
+                                </form>
+                                </td>
+                            </tr>
+                     <% } %>
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
