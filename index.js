@@ -1,11 +1,10 @@
-///// batas 
 const express = require('express');
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const path = require('path')
 const dotenv = require('dotenv').config();
 const methodOverride = require('method-override') // untuk menghandle put
-// const connectDB = require('./config/db');
+const connectDB = require('./src/config/db');
 
 var createError = require('http-errors');
 var cookieParser = require('cookie-parser');
@@ -15,10 +14,8 @@ const flash = require('connect-flash');
 const PORT = process.env.PORT;
 
 const app = express();
-//router admin
 const adminRouter = require('./src/routes/admin')
 var apiRouter = require('./src/routes/api')
-
 
 app.use(bodyParser.json()) // type json yang nantinya akan diterima
 
@@ -30,14 +27,13 @@ app.use((req, res, next)=>{
     next(); // agar requestnya tidak berhenti sampai disitu
 })
 
-mongoose.set('strictQuery', false);
-mongoose.connect('mongodb://localhost:27017/db-onlineattendance')
+// mongoose.set('strictQuery', false);
+// mongoose.connect('mongodb://localhost:27017/db-onlineattendance')
 
-// mongoose.connect(DB_URI)
-// connectDB();
+connectDB();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, './src/views'));
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
 app.use(session({
@@ -70,8 +66,3 @@ app.use((error, req, res, next)=>{
 })
 
 app.listen(PORT, ()=>console.log(`Conection Success from PORT ${PORT}`));
-
-
-
-
-
