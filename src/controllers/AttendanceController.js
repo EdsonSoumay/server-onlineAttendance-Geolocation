@@ -305,7 +305,7 @@ module.exports = {
         const { absenceId } = req.params;
         try {
             const getUserAttendance = await UserAttendance.find({attendanceId:absenceId})
-            .populate({path: 'userId', select: 'lastName firstName'})
+            .populate({path: 'userId', select: 'userName lastName firstName'})
             return res.status(201).json({
                 message: "Sucessfuly get User Attendance by absence",
                 data:getUserAttendance
