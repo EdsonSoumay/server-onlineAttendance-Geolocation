@@ -17,7 +17,7 @@ module.exports = {
             const alert = { message: alertMessage, status: alertStatus}
 
             //tidak pakai user session
-            res.redirect('/admin/dashboard')
+            res.redirect('/admin/signin')
 
             //logic pake session
             // //ini kondisi agar admin sudah tidak bisa mengakses login ketika sudah login
