@@ -16,18 +16,14 @@ module.exports = {
             const alertStatus = req.flash('alertStatus');
             const alert = { message: alertMessage, status: alertStatus}
 
-            //tidak pakai user session
-            res.redirect('/admin/signin')
-
-            //logic pake session
-            // //ini kondisi agar admin sudah tidak bisa mengakses login ketika sudah login
-            // if (req.session.user == null || req.session.user == undefined) {
-            //     //jika nd ada user, halaman yang ditampilkan adalah login
-            //     res.render('index' ,{alert, title: 'Online Attendance | Login'}); //{} = cara mendustructurisasi category
-            //   } else {
-            //     //tapi kalo ada user.sesion, halaman dashboard yang ditampilkan
-            //    res.redirect('/admin/dashboard')
-            //   }
+            //ini kondisi agar admin sudah tidak bisa mengakses login ketika sudah login
+            if (req.session.user == null || req.session.user == undefined) {
+                //jika nd ada user, halaman yang ditampilkan adalah login
+                res.render('index' ,{alert, title: 'Online Attendance | Login'}); //{} = cara mendustructurisasi category
+              } else {
+                //tapi kalo ada user.sesion, halaman dashboard yang ditampilkan
+               res.redirect('/admin/dashboard')
+              }
         } catch (error) {
             res.redirect('/admin/signin')
         }
@@ -35,7 +31,9 @@ module.exports = {
     actionSignin: async (req, res) => {
         try {
           const { username, password } = req.body;
+        //   console.log(req.body);
           const user = await Admin.findOne({ username: username });
+        //   console.log("user:",user);
           if (!user) {
             req.flash('alertMessage', 'User yang anda masukan tidak ada!!');
             req.flash('alertStatus', 'danger');
@@ -48,13 +46,14 @@ module.exports = {
             res.redirect('/admin/signin');
           }
     
-        //  // untuk sesion user
-        //   req.session.user = {
-        //     id: user.id,
-        //     username: user.username
-        //   }
+         // untuk sesion user
+          req.session.user = {
+            id: user.id,
+            username: user.username
+          }
     
-         return res.redirect('/admin/dashboard');
+          res.redirect('/admin/dashboard');
+    
         } catch (error) {
           res.redirect('/admin/signin');
         }
@@ -69,7 +68,8 @@ module.exports = {
             const activeMember = await Member.find({isActive: true, isAccepted: true});
             res.render('admin/dashboard/view_dashboard',{
                 title : 'Online Attendance | Dashboard',
-                user: req.session.user,
+                // user: req.session.user,
+                user: "testing",
                 allMember,
                 activeMember,
             });
