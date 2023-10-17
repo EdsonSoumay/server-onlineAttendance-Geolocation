@@ -4,9 +4,9 @@ const auth = require('../middleware/auth');
 
 router.get('/signin', adminController.viewSignin);
 router.post('/signin', adminController.actionSignin);
-router.get('/dashboard', adminController.viewDashboard);
 // router.use(auth);
 router.get('/logout', adminController.actionLogout);
+router.get('/dashboard', adminController.viewDashboard);
 
 //endpoint list absen
 router.get('/absen', adminController.viewAbsen);
@@ -23,6 +23,6 @@ router.put('/member/password/:id', adminController.resetPasswordMember); // Dele
 //enpoint update role
 router.put('/member/role/:id', adminController.updateRoleMember); // Delete member (active instead inactive)
 
-router.use(auth);
+router.use(auth);//ini hapus klo so pake user session
 
 module.exports = router;
