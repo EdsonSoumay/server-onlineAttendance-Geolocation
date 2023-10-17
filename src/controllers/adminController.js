@@ -392,7 +392,7 @@ module.exports = {
 
 
 
-//pake user session
+////pake controller ini kalo pake user session
 // const Member = require('../models/User')
 
 // const Admin = require('../models/Admin');
