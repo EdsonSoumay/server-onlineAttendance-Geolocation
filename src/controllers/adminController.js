@@ -8,6 +8,8 @@ const bcrypt = require('bcryptjs')
 const Attendance = require('../models/Attendance');
 const UserAttendance = require('../models/UserAttendance');
 
+const ejs = require("ejs");
+const pdf = require("html-pdf");
 
 module.exports = {
     viewSignin: async (req, res) =>{
@@ -214,6 +216,163 @@ module.exports = {
           } catch (error) {
             //   console.log("error:",error);
           }
+    },
+
+    generateAbsenceReport: async (req, res) =>{
+        try {
+            const { semester, schoolYear } = req.query;
+    
+            let arrayGetAttendance = []
+            let schoolYears = []
+                
+            let getSchoolYears = await Attendance.find({status: true})
+            
+                //check tahun ajaran
+                for(let i = 0; i < getSchoolYears.length; i++){
+                    if(!schoolYears.includes(getSchoolYears[i].schoolYear)){
+                      schoolYears.push(getSchoolYears[i].schoolYear)
+                    }
+                }
+    
+            const defaultSchoolYear = '2023-2024'
+            const defaultSemester = '1'
+           
+            // cari semua absen
+            let getAttendance; 
+            if(schoolYear, semester){
+              getAttendance = await Attendance.find({status: true, schoolYear:schoolYear, semester: semester})
+              .sort({absenDate: 1})
+            }
+            else{
+              getAttendance = await Attendance.find({status: true, schoolYear: defaultSchoolYear, semester: defaultSemester})
+             .sort({absenDate: 1})
+            }
+    
+            // cari absen user
+            for(let i = 0; i < getAttendance.length; i++){
+    
+                let newGetAttendance = getAttendance[i]
+    
+                const getUserAttendance = await UserAttendance.find({attendanceId: getAttendance[i]._id})
+                                         .populate({path: 'userId', select: 'lastName firstName userName'})
+            
+                let arrayUserGetAttendance = []
+                for(let i = 0; i < getUserAttendance.length; i++){
+                    arrayUserGetAttendance.push(getUserAttendance[i])
+                }
+    
+                newGetAttendance.userAttendance = arrayUserGetAttendance;
+                // console.log("typeof:", typeof getAttendance[i].absenDate);
+    
+                //set up date
+                // let day = getAttendance[i].absenDate.toLocaleDateString('en-US', {weekday: 'long'});
+                let dateNumber = getAttendance[i].absenDate.toLocaleDateString('en-US', {day: '2-digit'});
+                let month = getAttendance[i].absenDate.toLocaleDateString('en-US', {month: '2-digit'});
+                let year = getAttendance[i].absenDate.toLocaleDateString('en-US', {year: 'numeric'});
+                // let formattedDate = day + ', ' + dateNumber + ' - ' + month + ' - ' + year;
+                let formattedDate = dateNumber + '-' + month + '-' + year;
+                //end set up date
+    
+                //set up time GMT 8 (WITA)
+                let utc_hours = getAttendance[i].absenDate.getUTCHours();
+                utc_hours += 8;
+                getAttendance[i].absenDate.setUTCHours(utc_hours);
+                let dateString = getAttendance[i].absenDate.toISOString();
+                let timeString = dateString.slice(11, 23) + dateString.slice(26, 29);
+                //end set up time
+    
+    
+                newGetAttendance.absenDateString = formattedDate;
+             
+                newGetAttendance.absenTimeString = timeString;
+    
+                arrayGetAttendance.push(newGetAttendance)
+            }
+    
+    
+            // cocokan dengan nama member
+            const getMember = await Member.find({isActive: true})
+    
+            // console.log("get member:",getMember);
+            let newArrayobject2 = []
+            
+            for(let i = 0; i < getMember.length; i++){
+                let arrayObject = []
+                
+                for(let j = 0; j < arrayGetAttendance.length; j ++){
+    
+                   const filterArray = arrayGetAttendance[j].userAttendance.filter(e =>e.userId?.userName == getMember[i].userName);
+            
+                   if(filterArray){
+    
+                    if(filterArray.length!= 0){
+                        arrayObject.push({
+                            userId:getMember[i]._id,
+                            userName:getMember[i].userName,
+                            firstName:getMember[i].firstName,
+                            lastName:getMember[i].lastName,
+                            presence:filterArray[0].presence,
+                            date: arrayGetAttendance[j].date_created
+                        })
+                    }
+                    
+                    if(filterArray.length == 0){
+                        arrayObject.push({
+                            userId:getMember[i]._id,
+                            userName:getMember[i].userName,
+                            firstName:getMember[i].firstName,
+                            lastName:getMember[i].lastName,
+                            presence:'absen',
+                            date: arrayGetAttendance[j].date_created
+                        })
+                    }
+                   }
+                    
+                }
+                newArrayobject2.push(arrayObject)
+            }
+            
+            // console.log("new array obj 2:",newArrayobject2);
+            // console.log("aray get attendance:",arrayGetAttendance[0].absenDate.day);
+    
+                ejs.renderFile(path.join('./src/views/report-template', "index.ejs"), {
+                    date: arrayGetAttendance, 
+                    member: newArrayobject2,
+                    user: "user testing",
+                    schoolYear: schoolYear? schoolYear : defaultSchoolYear,
+                    semester: semester? semester : defaultSemester,
+                    filterSchoolYear: schoolYears
+                }, (err, data) => {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                        let options = {
+                            "format": "A3", // Format A4 untuk ukuran kertas A4
+                            // "format": [1000000, 297], // 
+                            "orientation": "landscape", // Mengatur orientasi menjadi lanskap
+                            "header": {
+                                "height": "20mm",
+                            },
+                            "footer": {
+                                "height": "20mm",
+                            },
+                        };
+                        pdf.create(data, options).toStream((err, stream) => {
+                            if (err) {
+                                res.send(err);
+                            } else {
+                                // Set header to force download
+                                res.setHeader('Content-Disposition', 'attachment; filename=edson.pdf');
+                                res.setHeader('Content-Type', 'application/pdf');
+                                // Pipe the PDF data directly to the response stream
+                                stream.pipe(res);
+                            }
+                        });
+                    }
+                });
+        } catch (error) {
+            return res.message({message:error})
+        }
     },
 
     editAbsen: async (req, res) =>{

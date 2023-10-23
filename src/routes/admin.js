@@ -11,6 +11,9 @@ router.get('/dashboard', adminController.viewDashboard);
 //endpoint list absen
 router.get('/absen', adminController.viewAbsen);
 
+//endpoint generate absen report
+router.get('/generateabsencereport', adminController.generateAbsenceReport);
+
 //endpoint list member
 router.get('/member', adminController.viewMember); // viewe all member (active instead inactive)
 router.delete('/member/:id', adminController.deleteMember); // Delete member (active instead inactive)

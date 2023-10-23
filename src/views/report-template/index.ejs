@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabel 60x20</title>
+	<style>
+        table {
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>User Name</th>
+                <th>Name</th>
+                <%
+                for (let i = 0; i < date.length; i++) {
+                let timeWithoutMiliSeconds = date[i].absenTimeString.substring(0, 8);
+                %>
+                <th>
+                    <%= date[i].absenDateString %>
+                    <br/>
+                    <%= timeWithoutMiliSeconds %>
+                </th>
+                <% } %>
+            </tr>
+        </thead>
+        <tbody>
+                            <% if(member.length !== 0){ %>
+                              <% if(member[0].length != 0){ %>
+                                <% for(let i = 0; i< member.length; i++){ %>
+                                  <tr>
+                                    <td><%=i + 1 %></td>
+                                    <td><%=member[i][0].userName %></td>
+                                    <td><%=member[i][0].firstName%> <%=member[i][0].lastName %></td>
+                                    <% for(let j = 0; j< member[i].length; j++){ %>
+                                        <% if(member[i][j].presence.includes('ontime')){ %>
+                                          <td >
+                                            <span style="color: #2ecc71;">
+                                              ✓
+                                            </span>
+                                            </td>
+                                        <% }else if(member[i][j].presence.includes('late')){  %>
+                                          <td >
+                                            <span style="color: #FBB117;">
+                                             <b>L</b>
+                                            </span>
+                                            </td>
+                                          <% } else{ %>
+                                            <td >
+                                              <span style="color: #cc0000;">
+                                               
+                                              </span>
+                                              </td>
+                                            <% } %>
+                                         <% } %>
+                                       </tr>
+                                    <% } %>
+                                 <% } %>
+                             <% } %>
+                          </tbody>
+    </table>
+</body>
+</html>

@@ -1,12 +1,17 @@
                   <!-- DataTales Example -->
                   <div class="card shadow mb-4">
                     <div class="card-header py-3">
+                      
                       <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-modal"> <!-- data-target: target dari tombol tersebut mau diarahkan kemana-->
                      <!-- <i class = "fas fa-plus"></i> -->
                       filter
                     </button>
-                    </div>
+                    <form class="btn btn-primary" action="/admin/generateabsencereport" method="GET">
+                      <input type="hidden" name="schoolYear" value="<%=schoolYear%>">
+                      <input type="hidden" name="semester" value="<%=semester%>">
+                      <button type="submit" class="btn btn-primary btn-sm">Print Report</button>
+                    </form>
                     <div class="card-body">
                       <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="display: block;  overflow-x: auto; white-space: nowrap;">
