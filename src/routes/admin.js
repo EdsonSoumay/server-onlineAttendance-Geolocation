@@ -4,7 +4,7 @@ const auth = require('../middleware/auth');
 
 router.get('/signin', adminController.viewSignin);
 router.post('/signin', adminController.actionSignin);
-// router.use(auth);//ini di uncomment kalo so pake user session
+// router.use(auth);//ini pake user session
 router.get('/logout', adminController.actionLogout);
 router.get('/dashboard', adminController.viewDashboard);
 
@@ -26,6 +26,6 @@ router.put('/member/password/:id', adminController.resetPasswordMember); // Dele
 //enpoint update role
 router.put('/member/role/:id', adminController.updateRoleMember); // Delete member (active instead inactive)
 
-router.use(auth);//ini hapus klo so pake user session
+router.use(auth);//ini nd pake user session
 
 module.exports = router;

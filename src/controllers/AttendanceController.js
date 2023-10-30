@@ -283,7 +283,8 @@ module.exports = {
                 // set up date and time
 
                  newGetAttendance.userAttendance = arrayUserGetAttendance;
-                arrayGetAttendance.push(newGetAttendance)
+                // arrayGetAttendance.push(newGetAttendance)
+                arrayGetAttendance.unshift(newGetAttendance)
             }
 
             return res.status(201).json({
