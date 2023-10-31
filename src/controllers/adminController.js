@@ -362,7 +362,7 @@ module.exports = {
                                 res.send(err);
                             } else {
                                 // Set header to force download
-                                res.setHeader('Content-Disposition', 'attachment; filename=edson.pdf');
+                                res.setHeader('Content-Disposition', 'attachment; filename=report.pdf');
                                 res.setHeader('Content-Type', 'application/pdf');
                                 // Pipe the PDF data directly to the response stream
                                 stream.pipe(res);
