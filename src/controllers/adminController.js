@@ -259,7 +259,7 @@ module.exports = {
             const parseMonth  = parseInt(month) + 1
             const parseYear = parseMonth >=13 ? parseInt(year) + 1 : year
             const startDate = `${year}-${month}-01T08:00:00.000Z`
-            const endDate = `${parseYear}-${ parseMonth >=12 ? '01' : parseMonth}-01T08:00:00.000Z`
+            const endDate = `${parseYear}-${ parseMonth >=13 ? '01' : parseMonth}-01T08:00:00.000Z`
             
             console.log("startdate:",startDate)
             console.log("endDate:",endDate)
@@ -287,7 +287,7 @@ module.exports = {
              .sort({absenDate: 1})
             }
     
-            console.log("getAttendance:",getAttendance)
+            // console.log("getAttendance:",getAttendance)
             // cari absen user
             for(let i = 0; i < getAttendance.length; i++){
     
