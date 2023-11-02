@@ -257,13 +257,17 @@ module.exports = {
             //   getAttendance = await Attendance.find({status: true, schoolYear:schoolYear, semester: semester})
 
             let parseMonth  = parseInt(month) + 1
-
             const parseYear = parseMonth >=13 ? parseInt(year) + 1 : year
-            const startDate = `${year}-${month}-01T08:00:00.000Z`
-            const endDate = `${parseYear}-${ parseMonth >=13 ? '01' : parseMonth.toString().length == 1 ? `0${parseMonth}` : parseMonth }-01T08:00:00.000Z`
+            const tempStartDate = `${year}-${month}-01T00:00:00.000Z`
+            const tempEndDate = `${parseYear}-${ parseMonth >=13 ? '01' : parseMonth.toString().length == 1 ? `0${parseMonth}` : parseMonth }-01T00:00:00.000Z`
             
-            console.log("startdate:",startDate)
-            console.log("endDate:",endDate)
+            let startDate = new Date(tempStartDate)
+                startDate.setHours(startDate.getHours()-8)
+            let endDate = new Date(tempEndDate);
+                endDate.setHours(endDate.getHours()-8)
+          
+            // console.log("startdate:",startDate)
+            // console.log("endDate:",endDate)
 
               getAttendance = await Attendance.find({
                 status: true, schoolYear:schoolYear, 

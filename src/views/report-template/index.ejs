@@ -44,20 +44,20 @@
                     <% for(let j = 0; j< member[i].length; j++){ %>
                         <% if(member[i][j].presence.includes('ontime')){ %>
                           <td >
-                            <span style="color: #2ecc71;">
-                              ✓
+                            <span style="color: #14870c;">
+                             <strong>✓</strong> 
                             </span>
                             </td>
                         <% }else if(member[i][j].presence.includes('late')){  %>
                           <td >
-                            <span style="color: #FBB117;">
-                              <b>L</b>
+                            <span style="color: #efc900;">
+                              <strong>L</strong>
                             </span>
                             </td>
                           <% } else{ %>
                             <td >
                               <span style="color: #cc0000;">
-                                
+                                x
                               </span>
                               </td>
                             <% } %>
