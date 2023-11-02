@@ -2,16 +2,24 @@
                   <div class="card shadow mb-4">
                     <div class="card-header py-3">
                       
+                     
+
                       <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-modal"> <!-- data-target: target dari tombol tersebut mau diarahkan kemana-->
                      <!-- <i class = "fas fa-plus"></i> -->
                       filter
                     </button>
-                    <form class="btn btn-primary" action="/admin/generateabsencereport" method="GET">
-                      <input type="hidden" name="schoolYear" value="<%=schoolYear%>">
-                      <input type="hidden" name="semester" value="<%=semester%>">
-                      <button type="submit" class="btn btn-primary btn-sm">Print Report</button>
-                    </form>
+                    
+                    <% for(let i = 0; i < datePayload.length; i++){ %>
+                      <form class="btn btn-primary" action="/admin/generateabsencereport" method="GET">
+                        <input type="hidden" name="schoolYear" value="<%=schoolYear%>">
+                        <input type="hidden" name="semester" value="<%=semester%>">
+                        <input type="hidden" name="month" value="<%=datePayload[i].month%>">
+                        <input type="hidden" name="year" value="<%=datePayload[i].year%>">
+                        <button type="submit" class="btn btn-primary btn-sm">Print Absen month <%= datePayload[i].month %></button>
+                      </form>
+                    <% } %>
+                    
                     <div class="card-body">
                       <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="display: block;  overflow-x: auto; white-space: nowrap;">
@@ -57,19 +65,19 @@
                                         <% if(member[i][j].presence.includes('ontime')){ %>
                                           <td >
                                             <span style="color: #2ecc71;">
-                                              <%= member[i][j].presence.split("_")[0] %>
+                                              ✓
                                             </span>
                                             </td>
                                         <% }else if(member[i][j].presence.includes('late')){  %>
                                           <td >
                                             <span style="color: #ccba2e;">
-                                              <%= member[i][j].presence.split("_")[0] %>
+                                             L
                                             </span>
                                             </td>
                                           <% } else{ %>
                                             <td >
                                               <span style="color: #cc0000;">
-                                                <%= member[i][j].presence %>
+                                               x
                                               </span>
                                               </td>
                                             <% } %>

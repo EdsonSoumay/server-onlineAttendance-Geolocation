@@ -86,6 +86,7 @@ module.exports = {
             const { schoolYear, semester } = req.query;
             let arrayGetAttendance = []
             let schoolYears = []
+            let datePayload=[]
                 
             let getSchoolYears = await Attendance.find({status: true})
             
@@ -148,6 +149,13 @@ module.exports = {
                 newGetAttendance.absenTimeString = timeString;
 
                 arrayGetAttendance.push(newGetAttendance)
+
+                const payload = JSON.stringify({year,month})
+
+                const isMonthExists = datePayload.includes(payload);
+                if(!isMonthExists){
+                    datePayload.push(payload)
+                }
             }
 
 
@@ -192,15 +200,19 @@ module.exports = {
                 }
                 newArrayobject2.push(arrayObject)
             }
-            
             // console.log("new array obj 2:",newArrayobject2);
             // console.log("aray get attendance:",arrayGetAttendance[0].absenDate.day);
+            let tempDatePayload =[]
+            for(let i = 0; i < datePayload.length; i++){
+                tempDatePayload.push(JSON.parse(datePayload[i]))
+            }
+            console.log("temp date payload:",tempDatePayload)
 
             const alertMessage = req.flash('alertMessage');
             const alertStatus = req.flash('alertStatus');
             const alert = { message: alertMessage, status: alertStatus}
             res.render('admin/absen/view_absen' ,{
-
+                datePayload: tempDatePayload,
                 date: arrayGetAttendance, 
                 member: newArrayobject2,
                 alert, 
@@ -220,7 +232,7 @@ module.exports = {
 
     generateAbsenceReport: async (req, res) =>{
         try {
-            const { semester, schoolYear } = req.query;
+            const { semester, schoolYear, month, year } = req.query;
     
             let arrayGetAttendance = []
             let schoolYears = []
@@ -236,18 +248,46 @@ module.exports = {
     
             const defaultSchoolYear = '2023-2024'
             const defaultSemester = '1'
+            const defaultYear = "2023"
+            const defaultMonth = "1"
            
             // cari semua absen
             let getAttendance; 
             if(schoolYear, semester){
-              getAttendance = await Attendance.find({status: true, schoolYear:schoolYear, semester: semester})
+            //   getAttendance = await Attendance.find({status: true, schoolYear:schoolYear, semester: semester})
+
+            const parseMonth  = parseInt(month) + 1
+            const parseYear = parseMonth >=13 ? parseInt(year) + 1 : year
+            const startDate = `${year}-${month}-01T08:00:00.000Z`
+            const endDate = `${parseYear}-${ parseMonth >=12 ? '01' : parseMonth}-01T08:00:00.000Z`
+            
+            console.log("startdate:",startDate)
+            console.log("endDate:",endDate)
+
+              getAttendance = await Attendance.find({
+                status: true, schoolYear:schoolYear, 
+                semester: semester,
+                absenDate: {
+                    $gte: startDate,
+                    $lt: endDate
+                  }
+            })
               .sort({absenDate: 1})
             }
             else{
-              getAttendance = await Attendance.find({status: true, schoolYear: defaultSchoolYear, semester: defaultSemester})
+              getAttendance = await Attendance.find({
+                status: true, 
+                schoolYear: defaultSchoolYear, 
+                semester: defaultSemester,
+                absenDate: {
+                    $gte: `${defaultYear}-${defaultMonth}-01T00:00:00.000Z`,
+                    $lt: `${defaultYear}-${ parseInt(defaultMonth) + 1}-01T00:00:00.000Z`
+                  }
+            })
              .sort({absenDate: 1})
             }
     
+            console.log("getAttendance:",getAttendance)
             // cari absen user
             for(let i = 0; i < getAttendance.length; i++){
     
@@ -362,7 +402,7 @@ module.exports = {
                                 res.send(err);
                             } else {
                                 // Set header to force download
-                                res.setHeader('Content-Disposition', 'attachment; filename=report.pdf');
+                                res.setHeader('Content-Disposition', `attachment; filename=absen-${year}-${month}.pdf`);
                                 res.setHeader('Content-Type', 'application/pdf');
                                 // Pipe the PDF data directly to the response stream
                                 stream.pipe(res);
@@ -371,7 +411,8 @@ module.exports = {
                     }
                 });
         } catch (error) {
-            return res.message({message:error})
+            console.log("error:",error)
+            // return res.message({message:error})
         }
     },
 
