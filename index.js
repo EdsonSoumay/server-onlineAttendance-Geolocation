@@ -27,10 +27,10 @@ app.use((req, res, next)=>{
     next(); // agar requestnya tidak berhenti sampai disitu
 })
 
-mongoose.set('strictQuery', false);
-mongoose.connect('mongodb://localhost:27017/db-onlineattendance')
+// mongoose.set('strictQuery', false);
+// mongoose.connect('mongodb://localhost:27017/db-onlineattendance') // connect local mongo
 
-// connectDB();
+connectDB();
 
 // view engine setup
 app.set('views', path.join(__dirname, './src/views'));

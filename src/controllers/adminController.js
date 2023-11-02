@@ -206,7 +206,7 @@ module.exports = {
             for(let i = 0; i < datePayload.length; i++){
                 tempDatePayload.push(JSON.parse(datePayload[i]))
             }
-            console.log("temp date payload:",tempDatePayload)
+            // console.log("temp date payload:",tempDatePayload)
 
             const alertMessage = req.flash('alertMessage');
             const alertStatus = req.flash('alertStatus');
@@ -256,10 +256,11 @@ module.exports = {
             if(schoolYear, semester){
             //   getAttendance = await Attendance.find({status: true, schoolYear:schoolYear, semester: semester})
 
-            const parseMonth  = parseInt(month) + 1
+            let parseMonth  = parseInt(month) + 1
+
             const parseYear = parseMonth >=13 ? parseInt(year) + 1 : year
             const startDate = `${year}-${month}-01T08:00:00.000Z`
-            const endDate = `${parseYear}-${ parseMonth >=13 ? '01' : parseMonth}-01T08:00:00.000Z`
+            const endDate = `${parseYear}-${ parseMonth >=13 ? '01' : parseMonth.toString().length == 1 ? `0${parseMonth}` : parseMonth }-01T08:00:00.000Z`
             
             console.log("startdate:",startDate)
             console.log("endDate:",endDate)
@@ -387,7 +388,7 @@ module.exports = {
                         res.send(err);
                     } else {
                         let options = {
-                            "format": "A3", // Format A4 untuk ukuran kertas A4
+                            "format": "A4", // Format A4 untuk ukuran kertas A4
                             // "format": [1000000, 297], // 
                             "orientation": "landscape", // Mengatur orientasi menjadi lanskap
                             "header": {
